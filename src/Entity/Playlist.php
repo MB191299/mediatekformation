@@ -6,6 +6,7 @@ use App\Repository\PlaylistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Expr\Cast\Int_;
 
 /**
  * @ORM\Entity(repositoryClass=PlaylistRepository::class)
@@ -76,6 +77,14 @@ class Playlist
         return $this->formations;
     }
 
+    /**
+     * @return int
+     */
+    public function nombreFormations(): int
+    {
+        return count($this->formations);
+    }
+
     public function addFormation(Formation $formation): self
     {
         if (!$this->formations->contains($formation)) {
@@ -98,20 +107,19 @@ class Playlist
         return $this;
     }
 
-	/**
-	 * @return Collection<int, string>
-	 */	
-	public function getCategoriesPlaylist() : Collection
-	{
-		$categories = new ArrayCollection();
-		foreach($this->formations as $formation){
-			$categoriesFormation = $formation->getCategories();
-			foreach($categoriesFormation as $categorieFormation)
-			if(!$categories->contains($categorieFormation->getName())){
-				$categories[] = $categorieFormation->getName();
-			}
-		}
-		return $categories;
-	}
-	
+    /**
+     * @return Collection<int, string>
+     */
+    public function getCategoriesPlaylist(): Collection
+    {
+        $categories = new ArrayCollection();
+        foreach ($this->formations as $formation) {
+            $categoriesFormation = $formation->getCategories();
+            foreach ($categoriesFormation as $categorieFormation)
+                if (!$categories->contains($categorieFormation->getName())) {
+                    $categories[] = $categorieFormation->getName();
+                }
+        }
+        return $categories;
+    }
 }

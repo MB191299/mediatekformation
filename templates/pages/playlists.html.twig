@@ -16,6 +16,11 @@
                         </div>
                     </form>                    
                 </th>
+                
+                <th class="text-left align-top" scope="col">
+                    Nombre de formations                  
+                </th>
+
                 <th class="text-left align-top" scope="col">
                     catégories
                     <form class="form-inline mt-1" method="POST" action="{{ path('playlists.findallcontain', {champ:'id', table:'categories'}) }}">
@@ -32,6 +37,7 @@
                         </select>                    
                     </form>            
                 </th>
+                
                 <th class="text-center align-top" scope="col">
                     &nbsp;
                 </th>				
@@ -46,7 +52,12 @@
                             <h5 class="text-info">
                                 {{ playlists[k].name }}
                             </h5>
-                        </td>                 
+                        </td>    
+                            <td>
+                            <h5 class="text-info">
+                                {{ playlists[k].nombreFormations }}
+                            </h5>
+                        </td>              
                         <td class="text-left">
                             {% set categories = playlists[k].categoriesplaylist %}
                             {% if categories|length > 0  %}
