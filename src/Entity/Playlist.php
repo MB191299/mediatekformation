@@ -82,7 +82,7 @@ class Playlist
      */
     public function nombreFormations(): int
     {
-        return count($this->formations);
+        return  count($this->formations);
     }
 
     public function addFormation(Formation $formation): self
