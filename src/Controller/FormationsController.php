@@ -7,10 +7,15 @@ use App\Entity\Categorie;
 use App\Entity\Playlist;
 use App\Repository\CategorieRepository;
 use App\Repository\FormationRepository;
+use App\Repository\PlaylistRepository;
+use DateTime;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Helper\Dumper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 /**
  * Controleur des formations
@@ -32,10 +37,19 @@ class FormationsController extends AbstractController
      */
     private $categorieRepository;
 
-    function __construct(FormationRepository $formationRepository, CategorieRepository $categorieRepository)
+    /**
+     * 
+     * @var PlaylistRepository
+     */
+    private $playlistRepository;
+
+
+
+    function __construct(FormationRepository $formationRepository, CategorieRepository $categorieRepository, PlaylistRepository $playlistRepository)
     {
         $this->formationRepository = $formationRepository;
         $this->categorieRepository = $categorieRepository;
+        $this->playlistRepository = $playlistRepository;
     }
 
     /**
@@ -107,10 +121,16 @@ class FormationsController extends AbstractController
      * @param type $id
      * @return Response
      */
-    public function delete($id): void
+    public function delete($id): Response
     {
         $formation = $this->formationRepository->find($id);
-        $formationToDelete = $this->formationRepository->remove($formation);
+        $this->formationRepository->remove($formation, false);
+        $formations = $this->formationRepository->findAll();
+        $categories = $this->categorieRepository->findAll();
+        return $this->render("pages/formations.html.twig", [
+            'formations' => $formations,
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -120,62 +140,91 @@ class FormationsController extends AbstractController
     public function afficherFormulaire(): Response
     {
         $tableauCategories = $this->categorieRepository->findAll();
+        $tableauPlaylists = $this->playlistRepository->findAll();
         return $this->render("pages/formulaire.html.twig", [
-            'categories'=> $tableauCategories
+            'titre' => null,
+            'description' => null,
+            'videoId' => null,
+            'date' => null,
+            'categories' => $tableauCategories,
+            'playlists' => $tableauPlaylists,
+            'playlist' => null
         ]);
     }
 
+    /**
+     * @Route("/formations/modifier/{id}", name="formulaire.modifier")
+     * @param type $id
+     * @return Response
+     */
+    public function afficherFormulaireRempli($id, Request $request): Response
+    {
+        $formation = $this->formationRepository->find($id);
+        $tableauCategories = $this->categorieRepository->findAll();
+        $tableauPlaylists = $this->playlistRepository->findAll();
+        $titre = $formation->getTitle();
+        $description = $formation->getDescription();
+        $categorie = $formation->getCategories()->toArray();
+        $playlist = $formation->getPlaylist()->getName();
+        $videoId = $formation->getVideoId();
+        $date = $formation->getPublishedAt();
+        return $this->render("pages/formulaire.html.twig", [
+            'titre' => $titre,
+            'description' => $description,
+            'categorie' => $categorie,
+            'categories' => $tableauCategories,
+            'playlist' => $playlist,
+            'playlists' => $tableauPlaylists,
+            'videoId' => $videoId,
+            'date' => $date,
+        ]);
+    }
+
+    //ajouter la nouvelle formation à la BDD
+    //faire pareil pour supprimer
     /**
      * @Route("/formations/formulaire", name="formations.ajouter")
      * @return Response
      */
     public function ajouter(Request $request)
     {
-        //dd($request->request->all());
+        // dd($request->request->all());
         if ($request->isMethod('POST')) {
             // Récupérez les données du formulaire
             $title = $request->request->get('titre');
             $description = $request->request->get('description');
-            $categorieName = $request->request->get('categorie');
-            $playlist = $request->request->get('playlist');
+            $categorieName = $request->request->all()['categories'];
+            $playlistName = $request->request->get('playlists');
             $publishedAt = $request->request->get('date');
             $videoId = $request->request->get('videoId');
         }
+
         $newFormation = new Formation();
-        if($title == null){
-            return $this->render("pages/formulaire.html.twig", []);
+
+        if ($title == null) {
+            return $this->afficherFormulaire();
         }
         $newFormation->setTitle($title);
         $newFormation->setDescription($description);
-        $newCategorie = new Categorie();
-        $newCategorie->setName($categorieName);
-        $newFormation->addCategory($newCategorie);
-        $newPlaylist = new Playlist();
-        $newPlaylist->setName($playlist);
-        $newFormation->setPlaylist($newPlaylist);
-        $newFormation->setVideoId($videoId);
-        $dateEntree = $newFormation->getPublishedAtString();
-        $dateJour = date("d/m/Y");
-        if($dateEntree==$dateJour){
-            $newFormation->setPublishedAt($publishedAt);
+        foreach ($categorieName as $categorie) {
+            $categories = $this->categorieRepository->find(intval($categorie));
+            $newFormation->addCategory($categories);
         }
 
-        $this->formationRepository->addFormation($newFormation);
-        return $this->render("pages/formation.html.twig", []);
+        $playlist = $this->playlistRepository->find(intval($playlistName));
+        $newFormation->setPlaylist($playlist);
+        $newFormation->setVideoId($videoId);
+        $newFormation->getMiniature();
+        // $newFormation->getPicture();
+        // $dateJour = strtotime($publishedAt);
+        // if ($dateEntree == $dateJour) { }
+        $date = new DateTime($publishedAt);
+        $newFormation->setPublishedAt($date);
+
+        $this->formationRepository->add($newFormation, true);
+        return $this->render("pages/formation.html.twig", [
+            'formation' => $newFormation,
+        ]);
+        //ajouter la nouvelle formation dans les playlits et les categories
     }
-
-
-    /**
-     * @Route("/formations/formation/modifier/{id}", name="formations.modifier")
-     * @param type $id
-     * @return Response
-     */
-    public function modifier($id): void
-    {
-        // affichage de toutes les données de cette formation avec le même formulaire que formulairehtmltwig 
-        // prise en compte des changements: supprimmer l'ancienne formation et ajouterla nouvelle   
-        $this->delete($id);
-        //$this->ajouter();
-    }
-
 }

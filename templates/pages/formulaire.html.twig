@@ -2,63 +2,54 @@
 {% block body %} 
     <form class="row gy-2 gx-3 align-items-center" action="{{ path('formations.ajouter') }}" method="post">
     <div class="mb-3">
-        <label class="visually-hidden" for="autoSizingInput">Titre</label>
-        <input type="text" class="form-control" id="autoSizingInput" placeholder="Formation" name='titre' required>
+        <label for="exampleFormControlTextarea1" class="form-label">Titre</label>
+        <input type="text" class="form-control" id="autoSizingInput" name='titre' value="{{titre ?? ""}}" required>
     </div>
     <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name='description'></textarea>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name='description' value="{{description ?? ""}}"></textarea>
     </div>
+   
     <div class="mb-3">
-        <label class="visually-hidden">Playlist</label>
-        <select class="form-select" id="autoSizingSelect" name='playlist'>
-        <option selected>Playlist...</option>
-        <option value="Bases de la programmation (C#)">Bases de la programmation (C#)</option>
-        <option value="Compléments Android (programmation mobile)">Compléments Android (programmation mobile)</option>
-        <option value="Cours Composant logiciel">Cours Composant logiciel</option>
-        <option value="Cours Curseurs">Cours Curseurs</option>
-        <option value="Cours de programmation objet">Cours de programmation objet</option>
-        <option value="Cours Informatique embarquée">Cours Informatique embarquée</option>
-        <option value="Cours MCD MLD MPD">Cours MCD MLD MPD</option>
-        <option value="Cours MCD vs Diagramme de classes">Cours MCD vs Diagramme de classes</option>
-        <option value="Cours Merise/2">Cours Merise/2</option>
-        <option value="Cours Modèle relationnel et MCD">Cours Modèle relationnel et MCD</option>
-        <option value="Cours Transactions et verrou">Cours Transactions et verrou</option>
-        <option value="Cours Triggers">Cours Triggers</option>
-        <option value="Cours UML">Cours UML</option>
-        <option value="Eclipse et Java">Eclipse et Java</option>
-        <option value="Exercices objet (sujets EDC BTS SIO)">Exercices objet (sujets EDC BTS SIO)</option>
-        <option value="Exercices triggers, sql et correctifs (sujets EDC BTS SIO)">Exercices triggers, sql et correctifs (sujets EDC BTS SIO)</option>
-        <option value="MCD : exercices progressifs">MCD : exercices progressifs</option>
-        <option value="MCD exercices d'examen (sujets EDC BTS SIO)">MCD exercices d'examen (sujets EDC BTS SIO)</option>
-        <option value="POO TP Java">POO TP Java</option>
-        <option value="Programmation sous Python">Programmation sous Python</option>
-        <option value="Sujet E5 SLAM 2017 métropole : cas AHM-23">Sujet E5 SLAM 2017 métropole : cas AHM-23</option>
-        <option value="Sujet E5 SLAM 2017 Nouméa: cas DANE">Sujet E5 SLAM 2017 Nouméa: cas DANE</option>
-        <option value="Sujet E5 SLAM 2018 métropole : cas WEBCAISSE">Sujet E5 SLAM 2018 métropole : cas WEBCAISSE</option>
-        <option value="Sujet E5 SLAM 2018 Nouméa : cas LOCALUX">Sujet E5 SLAM 2018 Nouméa : cas LOCALUX</option>
-        <option value="Sujet E5 SLAM 2019 métropole : cas RESTILOC">Sujet E5 SLAM 2019 métropole : cas RESTILOC</option>
-        <option value="TP Android (programmation mobile)">TP Android (programmation mobile)</option>
-        <option value="Visual Studio 2019 et C#">Visual Studio 2019 et C#</option>
-        </select>
-    </div>
-    <div class="mb-3">
-        
-        <select class="form-select form-select-sm" name="categories" id="creationCategorie" multiple>
-                            <option selected>Catégorie...</option>
-                            {% for categorie in categories %}
+        <label for="exampleFormControlTextarea1" class="form-label">Playlist</label>
+        <select class="form-select form-select-sm" name="playlists" id="creationPlaylist">
+                             {% if playlist is not null %} 
+                             <option selected>
+                                        {{playlist}}
+                                           </option>
+                                           {%else%}
+                                           <option selected>Playlist...</option>
+                                    {% endif %}>
+                                    
+                                 
+                            {% for playlist in playlists %}
                                 <option 
-                                    {% if valeur|default and valeur==categorie.id %} 
+                                    {% if valeur|default and valeur==playlists.id %} 
                                         selected
                                     {% endif %} 
-                                    value="{{ categorie.id }}">{{ categorie.name }}
+                                    value="{{ playlist.id }}">{{ playlist.name }}
                                 </option>
                             {% endfor %}
                         </select>  
     </div>
     <div class="mb-3">
-        <label class="visually-hidden" for="autoSizingInput">Lien vidéo</label>
-        <input type="text" class="form-control" id="autoSizingInput" placeholder="Lien vidéo" name='videoId'>
+        
+        <label for="exampleFormControlTextarea1" class="form-label">Catégories</label>
+        <select class="form-select form-select-sm" name="categories[]" id="creationCategorie" multiple>
+            {% for categorie in categories %}
+                {% set isSelected = false %}
+                {% for selectedCategorie in categorie %}
+                    {% if categorie.id == selectedCategorie.id %}
+                        {% set isSelected = true %}
+                    {% endif %}
+                {% endfor %}
+                <option {% if isSelected %}selected{% endif %} value="{{ categorie.id }}">{{ categorie.name }}</option>
+            {% endfor %}
+        </select>  
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Lien vidéo</label>
+        <input type="text" class="form-control" id="autoSizingInput" name='videoId' value="{{videoId ?? ""}}">
     </div>
     <div class="mb-3">
         <label for="start">Date:</label>

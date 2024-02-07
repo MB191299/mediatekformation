@@ -61,7 +61,7 @@
         <tbody>
         <tr class="align-middle">
             <td class="text-right">
-            <a href="{{ path('formulaire.affichage') }}">
+            <a href="{{ path('formulaire.affichage')}}">
                 <button type="button" class="btn btn-success">Ajouter</button></a>
             </td>
         </tbody>
@@ -91,11 +91,11 @@
                         {% endif %}
                     </td>
                     <td class="text-center">
-                        <a href="{{ path('formations.showone', {id:formation.id}) }}"></a>
-                        <button type="button" class="btn btn-danger">Supprimer</button>
+                        <a href="{{ path('formations.delete', {id:formation.id}) }}" class="btn btn-danger"
+                        onclick="confirm('Etes-vous sûr de vouloir supprimer {{formation.title}} ?')">Supprimer</a>
                     </td>
                     <td class="text-center">
-                        <a href="{{ path('formations.showone', {id:formation.id}) }}"></a>
+                        <a href="{{ path('formulaire.modifier', {id:formation.id}) }}">
                         <button type="button" class="btn btn-secondary">Modifier</button>
                     </td>
                 </tr>

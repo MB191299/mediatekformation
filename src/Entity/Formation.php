@@ -17,7 +17,7 @@ class Formation
      * Début de chemin vers les images
      */
     private const cheminImage = "https://i.ytimg.com/vi/";
-    
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -46,12 +46,12 @@ class Formation
     private $videoId;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Playlist::class, inversedBy="formations")
+     * @ORM\ManyToOne(targetEntity=Playlist::class, inversedBy="formations", cascade={"persist"}))
      */
     private $playlist;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Categorie::class, inversedBy="formations")
+     * @ORM\ManyToMany(targetEntity=Categorie::class, inversedBy="formations", cascade={"persist"}))
      */
     private $categories;
 
@@ -82,9 +82,10 @@ class Formation
 
         return $this;
     }
-    
-    public function getPublishedAtString(): string {
-        if($this->publishedAt == null){
+
+    public function getPublishedAtString(): string
+    {
+        if ($this->publishedAt == null) {
             return "";
         }
         return $this->publishedAt->format('d/m/Y');
@@ -116,12 +117,12 @@ class Formation
 
     public function getMiniature(): ?string
     {
-        return self::cheminImage.$this->videoId."/default.jpg";
+        return self::cheminImage . $this->videoId . "/default.jpg";
     }
 
     public function getPicture(): ?string
     {
-        return self::cheminImage.$this->videoId."/hqdefault.jpg";
+        return self::cheminImage . $this->videoId . "/hqdefault.jpg";
     }
 
     public function getVideoId(): ?string
