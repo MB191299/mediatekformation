@@ -53,9 +53,18 @@
                 <th class="text-center align-top" scope="col">
                     &nbsp;
                 </th>
+                <th class="text-center align-top" scope="col">
+                    actions<br/>
+                </th>
             </tr>
         </thead>
         <tbody>
+        <tr class="align-middle">
+            <td class="text-right">
+            <a href="{{ path('formulaire.affichage') }}">
+                <button type="button" class="btn btn-success">Ajouter</button></a>
+            </td>
+        </tbody>
             {% for formation in formations %}
                 <tr class="align-middle">
                     <td>
@@ -80,6 +89,14 @@
                                 <img src="{{ formation.miniature }}">
                             </a>
                         {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <a href="{{ path('formations.showone', {id:formation.id}) }}"></a>
+                        <button type="button" class="btn btn-danger">Supprimer</button>
+                    </td>
+                    <td class="text-center">
+                        <a href="{{ path('formations.showone', {id:formation.id}) }}"></a>
+                        <button type="button" class="btn btn-secondary">Modifier</button>
                     </td>
                 </tr>
             {% endfor %}

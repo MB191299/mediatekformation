@@ -55,6 +55,8 @@ class Formation
      */
     private $categories;
 
+    private $nbFormations;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -63,6 +65,10 @@ class Formation
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function nbFormations(): ?int
+    {
+        return 52;
     }
 
     public function getPublishedAt(): ?DateTimeInterface
@@ -81,8 +87,8 @@ class Formation
         if($this->publishedAt == null){
             return "";
         }
-        return $this->publishedAt->format('d/m/Y');     
-    }      
+        return $this->publishedAt->format('d/m/Y');
+    }
 
     public function getTitle(): ?string
     {
