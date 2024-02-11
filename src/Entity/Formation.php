@@ -91,6 +91,14 @@ class Formation
         return $this->publishedAt->format('d/m/Y');
     }
 
+    public function getPublishedAtCalendar(): string
+    {
+        if ($this->publishedAt == null) {
+            return "";
+        }
+        return $this->publishedAt->format("Y-m-d\TH:i");
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;
