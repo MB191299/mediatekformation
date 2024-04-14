@@ -7,6 +7,10 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use function PHPUnit\Framework\returnSelf;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 
 /**
  * @ORM\Entity(repositoryClass=FormationRepository::class)
@@ -27,6 +31,11 @@ class Formation
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\Range(
+     *     min = null,
+     *     max = "now",
+     *     notInRangeMessage = "La date de publication ne peut pas être postérieure à la date actuelle."
+     * )
      */
     private $publishedAt;
 
@@ -55,7 +64,7 @@ class Formation
      */
     private $categories;
 
-    private $nbFormations;
+
 
     public function __construct()
     {
@@ -66,10 +75,6 @@ class Formation
     {
         return $this->id;
     }
-    public function nbFormations(): ?int
-    {
-        return 52;
-    }
 
     public function getPublishedAt(): ?DateTimeInterface
     {
@@ -79,7 +84,6 @@ class Formation
     public function setPublishedAt(?DateTimeInterface $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
-
         return $this;
     }
 
@@ -138,10 +142,14 @@ class Formation
         return $this->videoId;
     }
 
+    public function appendLinkVideoId(): string
+    {
+        return "https://youtu.be/".$this->videoId;
+    }
+
     public function setVideoId(?string $videoId): self
     {
-        $this->videoId = $videoId;
-
+        $this->videoId = str_replace("https://youtu.be/", "", $videoId);
         return $this;
     }
 

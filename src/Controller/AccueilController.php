@@ -24,7 +24,7 @@ class AccueilController extends AbstractController{
      */
     public function __construct(FormationRepository $repository) {
         $this->repository = $repository;
-    }   
+    }
     
     /**
      * @Route("/", name="accueil")
@@ -34,7 +34,7 @@ class AccueilController extends AbstractController{
         $formations = $this->repository->findAllLasted(2);
         return $this->render("pages/accueil.html.twig", [
             'formations' => $formations
-        ]); 
+        ]);
     }
     
     /**

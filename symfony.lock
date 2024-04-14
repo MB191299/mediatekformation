@@ -1,4 +1,16 @@
 {
+    "dama/doctrine-test-bundle": {
+        "version": "8.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "7.2",
+            "ref": "896306d79d4ee143af9eadf9b09fd34a8c391b70"
+        },
+        "files": [
+            "./config/packages/dama_doctrine_test_bundle.yaml"
+        ]
+    },
     "doctrine/annotations": {
         "version": "1.13",
         "recipe": {
@@ -36,6 +48,18 @@
         "files": [
             "./config/packages/doctrine_migrations.yaml",
             "./migrations/.gitignore"
+        ]
+    },
+    "knpuniversity/oauth2-client-bundle": {
+        "version": "2.10",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.20",
+            "ref": "1ff300d8c030f55c99219cc55050b97a695af3f6"
+        },
+        "files": [
+            "./config/packages/knpu_oauth2_client.yaml"
         ]
     },
     "phpunit/phpunit": {

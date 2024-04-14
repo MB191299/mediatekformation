@@ -77,4 +77,13 @@ class Categorie
 
         return $this;
     }
+    
+    /**
+     * Compte le nombres de formations
+     * @return int
+     */
+    public function nombreFormations(): int
+    {
+        return  count($this->formations);
+    }
 }
