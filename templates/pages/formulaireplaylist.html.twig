@@ -1,0 +1,37 @@
+{% extends "basefront.html.twig" %}
+{% block body %} 
+    <form class="row gy-2 gx-3 align-items-center" action="{{ path('playlists.ajouter') }}" method="post">
+    <input type="hidden" value="{{playlist_id ?? ""}}" name="playlist_id"  />
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Nom</label>
+        <input type="text" class="form-control" id="autoSizingInput" name='nom' value="{{nom ?? ""}}" required>
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name='description'>{{description ?? ""}}</textarea>
+    </div>
+   
+    <div class="mb-3">    
+        
+        {% if formation is not null %}  
+            <label for="exampleFormControlTextarea1" class="form-label">Formations</label>
+                <select class="form-select form-select-sm" name='formations[]' id="creationFormation" multiple>
+                        {% for item in formations %}
+                            {% set isSelected = false %} 
+                            {% for uneFormation in formation %}
+                                {% if item.id == uneFormation.id %}
+                                    {% set isSelected = true %}
+                                {% endif %}
+                            {% endfor %}
+                            <option {% if isSelected %}selected{% endif %} value="{{ item.id }}">{{ item.title }}</option>
+                        {% endfor %}
+                </select> 
+        {% endif %} 
+    </div>
+
+    <div class="mb-3">
+      <input type="hidden" name="_token" value="{{ csrf_token('submit_form') }}" required>
+        <button type="submit" class="btn btn-success">Ajouter</button>
+        </div>
+    </form>
+{% endblock %}

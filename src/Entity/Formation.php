@@ -7,6 +7,10 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use function PHPUnit\Framework\returnSelf;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 
 /**
  * @ORM\Entity(repositoryClass=FormationRepository::class)
@@ -17,7 +21,7 @@ class Formation
      * Début de chemin vers les images
      */
     private const cheminImage = "https://i.ytimg.com/vi/";
-    
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -27,6 +31,11 @@ class Formation
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\Range(
+     *     min = null,
+     *     max = "now",
+     *     notInRangeMessage = "La date de publication ne peut pas être postérieure à la date actuelle."
+     * )
      */
     private $publishedAt;
 
@@ -46,16 +55,16 @@ class Formation
     private $videoId;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Playlist::class, inversedBy="formations")
+     * @ORM\ManyToOne(targetEntity=Playlist::class, inversedBy="formations", cascade={"persist"}))
      */
     private $playlist;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Categorie::class, inversedBy="formations")
+     * @ORM\ManyToMany(targetEntity=Categorie::class, inversedBy="formations", cascade={"persist"}))
      */
     private $categories;
 
-    private $nbFormations;
+
 
     public function __construct()
     {
@@ -66,10 +75,6 @@ class Formation
     {
         return $this->id;
     }
-    public function nbFormations(): ?int
-    {
-        return 52;
-    }
 
     public function getPublishedAt(): ?DateTimeInterface
     {
@@ -79,15 +84,23 @@ class Formation
     public function setPublishedAt(?DateTimeInterface $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
-
         return $this;
     }
-    
-    public function getPublishedAtString(): string {
-        if($this->publishedAt == null){
+
+    public function getPublishedAtString(): string
+    {
+        if ($this->publishedAt == null) {
             return "";
         }
         return $this->publishedAt->format('d/m/Y');
+    }
+
+    public function getPublishedAtCalendar(): string
+    {
+        if ($this->publishedAt == null) {
+            return "";
+        }
+        return $this->publishedAt->format("Y-m-d\TH:i");
     }
 
     public function getTitle(): ?string
@@ -116,12 +129,12 @@ class Formation
 
     public function getMiniature(): ?string
     {
-        return self::cheminImage.$this->videoId."/default.jpg";
+        return self::cheminImage . $this->videoId . "/default.jpg";
     }
 
     public function getPicture(): ?string
     {
-        return self::cheminImage.$this->videoId."/hqdefault.jpg";
+        return self::cheminImage . $this->videoId . "/hqdefault.jpg";
     }
 
     public function getVideoId(): ?string
@@ -129,10 +142,14 @@ class Formation
         return $this->videoId;
     }
 
+    public function appendLinkVideoId(): string
+    {
+        return "https://youtu.be/".$this->videoId;
+    }
+
     public function setVideoId(?string $videoId): self
     {
-        $this->videoId = $videoId;
-
+        $this->videoId = str_replace("https://youtu.be/", "", $videoId);
         return $this;
     }
 

@@ -1,0 +1,52 @@
+{% extends "basefront.html.twig" %}
+{% block body %}
+
+{% if app.session.has('message') %}
+        <div class="alert alert-info">
+            {{ app.session.get('message') }}
+        </div>
+        {% set _ = app.session.remove('message') %}
+    {% endif %}
+    
+    <table class="table table-striped">
+
+<thead>
+    <tbody>
+        <tr class="align-middle">
+            <form class="row gy-2 gx-3 align-items-center" action="{{ path('categories.ajouter') }}" method="post">
+                <td>
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="autoSizingInput" name='nom' value="{{nom ?? ""}}" required>
+                    </div>
+                </td>     					
+                <td class="text-center">
+                    <div class="mb-3">
+                        <input type="hidden" name="_token" value="{{ csrf_token('submit_form') }}" required>
+                        <button type="submit" class="btn btn-success">Ajouter</button>
+                    </div>
+                </td>
+            </form>
+        </tr>
+</tbody>
+</thead>
+
+        <tbody>
+            <!-- boucle sur les categories -->
+            {% if categories|length > 0 %}
+                {% for k in 0..categories|length-1 %}
+                    <tr class="align-middle">
+                        <td>
+                            <h5 class="text-info">
+                                {{ categories[k].name }}
+                            </h5>
+                        </td>     					
+                     <td class="text-center">
+                        <a href="{{ path('categorie.delete', {id:categories[k].id}) }}" class="btn btn-danger"
+                        onclick="confirm('Etes-vous sûr de vouloir supprimer {{categories[k].name}}?')">Supprimer</a>
+                    </td>
+                {% endfor %}	
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

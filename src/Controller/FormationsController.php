@@ -7,10 +7,15 @@ use App\Entity\Categorie;
 use App\Entity\Playlist;
 use App\Repository\CategorieRepository;
 use App\Repository\FormationRepository;
+use App\Repository\PlaylistRepository;
+use DateTime;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Helper\Dumper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 /**
  * Controleur des formations
@@ -21,7 +26,6 @@ class FormationsController extends AbstractController
 {
 
     /**
-     * 
      * @var FormationRepository
      */
     private $formationRepository;
@@ -32,13 +36,24 @@ class FormationsController extends AbstractController
      */
     private $categorieRepository;
 
-    function __construct(FormationRepository $formationRepository, CategorieRepository $categorieRepository)
+    /**
+     * 
+     * @var PlaylistRepository
+     */
+    private $playlistRepository;
+
+
+
+    function __construct(FormationRepository $formationRepository, CategorieRepository $categorieRepository, PlaylistRepository $playlistRepository)
     {
         $this->formationRepository = $formationRepository;
         $this->categorieRepository = $categorieRepository;
+        $this->playlistRepository = $playlistRepository;
     }
 
     /**
+     * * Affiche toutes les formations.
+     * 
      * @Route("/formations", name="formations")
      * @return Response
      */
@@ -53,10 +68,12 @@ class FormationsController extends AbstractController
     }
 
     /**
+     * Trie les formations selon le champ spécifié.
+     *
      * @Route("/formations/tri/{champ}/{ordre}/{table}", name="formations.sort")
-     * @param type $champ
-     * @param type $ordre
-     * @param type $table
+     * @param string $champ Le champ selon lequel trier les formations
+     * @param string $ordre L'ordre de tri (ASC ou DESC)
+     * @param string $table La table dans laquelle effectuer le tri
      * @return Response
      */
     public function sort($champ, $ordre, $table = ""): Response
@@ -70,10 +87,12 @@ class FormationsController extends AbstractController
     }
 
     /**
+     * Recherche les formations selon la valeur spécifiée.
+     *
      * @Route("/formations/recherche/{champ}/{table}", name="formations.findallcontain")
-     * @param type $champ
-     * @param Request $request
-     * @param type $table
+     * @param string $champ Le champ dans lequel effectuer la recherche
+     * @param Request $request La requête HTTP contenant la valeur de recherche
+     * @param string $table La table dans laquelle effectuer la recherche
      * @return Response
      */
     public function findAllContain($champ, Request $request, $table = ""): Response
@@ -90,8 +109,10 @@ class FormationsController extends AbstractController
     }
 
     /**
+     * Affiche une seule formation.
+     *
      * @Route("/formations/formation/{id}", name="formations.showone")
-     * @param type $id
+     * @param int $id L'identifiant de la formation à afficher
      * @return Response
      */
     public function showOne($id): Response
@@ -101,81 +122,4 @@ class FormationsController extends AbstractController
             'formation' => $formation
         ]);
     }
-
-    /**
-     * @Route("/formations/formation/supprimer/{id}", name="formations.delete")
-     * @param type $id
-     * @return Response
-     */
-    public function delete($id): void
-    {
-        $formation = $this->formationRepository->find($id);
-        $formationToDelete = $this->formationRepository->remove($formation);
-    }
-
-    /**
-     * @Route("/formations/ajouter", name="formulaire.affichage")
-     * @return Response
-     */
-    public function afficherFormulaire(): Response
-    {
-        $tableauCategories = $this->categorieRepository->findAll();
-        return $this->render("pages/formulaire.html.twig", [
-            'categories'=> $tableauCategories
-        ]);
-    }
-
-    /**
-     * @Route("/formations/formulaire", name="formations.ajouter")
-     * @return Response
-     */
-    public function ajouter(Request $request)
-    {
-        //dd($request->request->all());
-        if ($request->isMethod('POST')) {
-            // Récupérez les données du formulaire
-            $title = $request->request->get('titre');
-            $description = $request->request->get('description');
-            $categorieName = $request->request->get('categorie');
-            $playlist = $request->request->get('playlist');
-            $publishedAt = $request->request->get('date');
-            $videoId = $request->request->get('videoId');
-        }
-        $newFormation = new Formation();
-        if($title == null){
-            return $this->render("pages/formulaire.html.twig", []);
-        }
-        $newFormation->setTitle($title);
-        $newFormation->setDescription($description);
-        $newCategorie = new Categorie();
-        $newCategorie->setName($categorieName);
-        $newFormation->addCategory($newCategorie);
-        $newPlaylist = new Playlist();
-        $newPlaylist->setName($playlist);
-        $newFormation->setPlaylist($newPlaylist);
-        $newFormation->setVideoId($videoId);
-        $dateEntree = $newFormation->getPublishedAtString();
-        $dateJour = date("d/m/Y");
-        if($dateEntree==$dateJour){
-            $newFormation->setPublishedAt($publishedAt);
-        }
-
-        $this->formationRepository->addFormation($newFormation);
-        return $this->render("pages/formation.html.twig", []);
-    }
-
-
-    /**
-     * @Route("/formations/formation/modifier/{id}", name="formations.modifier")
-     * @param type $id
-     * @return Response
-     */
-    public function modifier($id): void
-    {
-        // affichage de toutes les données de cette formation avec le même formulaire que formulairehtmltwig 
-        // prise en compte des changements: supprimmer l'ancienne formation et ajouterla nouvelle   
-        $this->delete($id);
-        //$this->ajouter();
-    }
-
 }
