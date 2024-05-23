@@ -84,3 +84,24 @@ Le chemin des images (des 2 tailles) n'est pas mémorisé dans la BDD car il peu
 - Dans phpMyAdmin, se connecter à MySQL en root sans mot de passe et créer la BDD 'mediatekformation'.<br>
 - Récupérer le fichier mediatekformation.sql en racine du projet et l'utiliser pour remplir la BDD (si vous voulez mettre un login/pwd d'accès, il faut créer un utilisateur, lui donner les droits sur la BDD et il faut le préciser dans le fichier ".env" en racine du projet).<br>
 - De préférence, ouvrir l'application dans un IDE professionnel. L'adresse pour la lancer est : http://localhost/mediatekformation/public/index.php<br>
+### Ajout de fonctionnalités
+- Dans la page playlist, ajout d'une colonne indiquant le nombre de formations par playlist. Sur cette colonne, un tri croissant ou décroissant est possile, permettant d'afficher les playlists dans l'ordre selon leur nombre de formations.
+- Création d'une partie back office, permettant la gestion des formations, playlists et catégories après authentification.
+![img8](https://github.com/MB191299/mediatekformation/blob/master/diagramme%20cas%20d'utilisation/Capture%20d'%C3%A9cran%202024-05-20%20153937.png)
+![img11](https://github.com/MB191299/mediatekformation/blob/master/captures%20ecran%20mediatekformation/Capture%20d'%C3%A9cran%202024-05-20%20155256.png)
+- Concernant la gestion des formations, la liste apparait, et il est possible d'ajouter, modifier ou supprimer une formation. Pour l'ajout ou la modification, redirection vers un formulaire (prérempli pour la modification). Dans ce formulaire, la saisie est controllée, la playlist et la catégorie sont a sélectionner dans une liste, et la date, elle aussi a sélectionner ne peut pas etre antérieure a la date du jour.
+Pour la suppression, lorsqu'une formation est supprimée, une confirmation est requise, et la formation sera automatiquement supprimée dans la playlist à laquelle elle appartient.
+Les mêmes tris et filtres pésents dan le front office le sont dans le back office.
+- Concernant la gestion des playlists, la liste apparait, et il est possible d'ajouter, de modifier ou de supprimer une playlist. Pour l'ajout et la modification, il y a une redirection vers un formulaire (prérempli pour la modification). Dans ce formulaire, la saisie est controllée.
+Pour la suppression, elle n'est possible que si aucune formation n'est rattachée à la playlist.
+Les mêmes tris et filtres présents dans le front office le sont dans le back office.
+![img9](https://github.com/MB191299/mediatekformation/blob/master/diagramme%20cas%20d'utilisation/Capture%20d'%C3%A9cran%202024-05-20%20153957.png)
+![img13](https://github.com/MB191299/mediatekformation/blob/master/captures%20ecran%20mediatekformation/Capture%20d'%C3%A9cran%202024-05-20%20155440.png)
+- Concernant la gestion des catégories, la liste apparait, et il est possible d'ajouter ou de supprimer une catégorie. Pour l'ajoût, un mini formulaire apparait en haut de la page, et il n'est pas possible d'ajouter une catégorie si le nom est déja existant.
+Pour la suppression, une catégorie ne peut être supprimée que si aucune formation ne lui est rattachée.
+![img10](https://github.com/MB191299/mediatekformation/blob/master/Capture%20d'%C3%A9cran%202024-05-20%20160221.png))
+![img12](https://github.com/MB191299/mediatekformation/blob/master/captures%20ecran%20mediatekformation/Capture%20d'%C3%A9cran%202024-05-20%20155440.png)
+- L'authentification de l'accès est gérée par Keycloak. Il est possible de se déconnecter a partir de toutes les pages.
+- La documentation technique a été générée.
+- Le site est déployé et le serveur d'authentification Keycloack est configuré sur une vm en ligne.
+- Mise en place du déploiement continu

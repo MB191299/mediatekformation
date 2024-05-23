@@ -7,10 +7,11 @@ jobs:
     steps:
     - name: Get latest code
       uses: actions/checkout@v2
+      
     - name: Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
-        server: mediatekformationmb.go.yo.fr
-        server-dir: /
+        server: node153-eu.n0c.com
+        server-dir: /public_html/mediatekformation/
         username: fichiers@mediatekformationmb.go.yo.fr
         password: ${{ secrets.ftp_password }}
