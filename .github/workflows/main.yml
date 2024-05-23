@@ -11,6 +11,6 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
         server: mediatekformationmb.go.yo.fr
-        server-dir: /public_html/mediatekformation/
+        server-dir: /
         username: fichiers@mediatekformationmb.go.yo.fr
         password: ${{ secrets.ftp_password }}
