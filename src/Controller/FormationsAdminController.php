@@ -175,24 +175,13 @@ class FormationsAdminController extends AbstractController
         // dd($formation, "sss");
         $tableauCategories = $this->categorieRepository->findAll();
         $tableauPlaylists = $this->playlistRepository->findAll();
-        $titre = $formation->getTitle(); 
-        $description = $formation->getDescription();
-        $categorie = $formation->getCategories()->toArray();
-        $playlist =   $formation->getPlaylist();
-        $videoId = $formation->getVideoId();
         $date = $formation->getPublishedAt();
         return $this->render("pages/formulaire.html.twig", [
             'formation' => $formation,
-            // 'titre' => $titre,
-            // 'description' => $description,
-            // 'categorie' => $categorie,
             'categories' => $tableauCategories,
-            // 'playlist' => $playlist,
             'playlists' => $tableauPlaylists,
-            // 'videoId' => $videoId,
             'datejour' =>  $this->getDateJour(),
             'date' => $date,
-            // 'formation_id' => $id
         ]);
     }
 

@@ -53,7 +53,6 @@ class PlaylistsAdminController extends AbstractController
 
     /**
      * Afficher la liste des playlists
-     * 
      * @Route("/admin/playlists", name="playlistsadmin")
      * @return Response
      */
@@ -216,8 +215,6 @@ class PlaylistsAdminController extends AbstractController
     public function afficherFormulairePlaylistRempli($id): Response
     {
         $playlist = $this->playlistRepository->find($id);
-        $nom = $playlist->getName();
-        $description = $playlist->getDescription();
         $formation = $playlist->getFormations()->toArray();
         $tableauFormations = $this->formationRepository->findAll();
         //dd($formation);
@@ -225,8 +222,6 @@ class PlaylistsAdminController extends AbstractController
             'playlist' => $playlist,
             'formation' => $formation,
             'formations' => $tableauFormations,
-            'nom' => $nom,
-            'description' => $description,
             'playlist_id' => $id
         ]);
     }

@@ -4,11 +4,11 @@
     <input type="hidden" value="{{playlist_id ?? ""}}" name="playlist_id"  />
     <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Nom</label>
-        <input type="text" class="form-control" id="autoSizingInput" name='nom' value="{{nom ?? ""}}" required>
+        <input type="text" class="form-control" id="autoSizingInput" name='nom' value="{{playlist.name ?? ""}}" required>
     </div>
     <div class="mb-3">
         <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name='description'>{{description ?? ""}}</textarea>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name='description'>{{playlist.description ?? ""}}</textarea>
     </div>
    
     <div class="mb-3">    
