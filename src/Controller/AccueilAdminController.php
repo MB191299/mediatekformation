@@ -8,11 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Controleur de l'accueil
+ * Controleur de l'accueil en admins
  *
  * @author emds
  */
-class AccueilController extends AbstractController
+class AccueilAdminController extends AbstractController
 {
 
     /**
