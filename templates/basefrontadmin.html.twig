@@ -11,6 +11,7 @@
     <div class="text-right">
         {% include 'baseadmin.html.twig' %}
     </div>
+    {% if app.user %}
     <!-- menu -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -25,22 +26,13 @@
                     <a class="nav-link" href="{{ path('playlistsadmin') }}">Playlists</a>
                 </li>
             </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('logout') }}">se déconnecter</a>
+                </li>
+            </ul>
         </div>
-
     </nav>
-</div>
-{% endblock %}
-{% block body %}{% endblock %}
-{% block footer %}
-<div class="container text-center">
-    <footer>
-        <hr>
-        <p><small><i>
-                    Consultez nos <a class="link-secondary" href="{{ path('cgu') }}">Conditions Générales
-                        d'Utilisation</a>
-                </i></small></p>
-
-    </footer>
-</div>
-{% endblock %}
-{% block javascripts %}{% endblock %}
+    {% endif %}
+    {% endblock %}
+    {% block javascripts %}{% endblock %}
