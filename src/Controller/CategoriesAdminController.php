@@ -93,7 +93,7 @@ class CategoriesAdminController extends AbstractController
     /**
      * Add a new category.
      *
-     * @Route("/playlists/formulaireplaylist", name="categories.ajouter")
+     * @Route("/categories/formulairecategorie", name="categories.ajouter")
      * @param Request $request The request object
      * @return Response
      */

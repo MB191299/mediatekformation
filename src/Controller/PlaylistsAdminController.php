@@ -207,7 +207,6 @@ class PlaylistsAdminController extends AbstractController
 
     /**
      * Affiche le formulaire de modification d'une playlist existante.
-     * 
      * @Route("/playlists/playlist/modifier/{id}", name="formulaireplaylist.modifier")
      * @param type $id
      * @return Response
@@ -228,7 +227,6 @@ class PlaylistsAdminController extends AbstractController
 
     /**
      * Ajoute une nouvelle playlist à la base de données.
-     * 
      * @Route("/playlists/formulaireplaylist", name="playlists.ajouter")
      * @return Response
      */
